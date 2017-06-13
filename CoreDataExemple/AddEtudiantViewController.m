@@ -18,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     ageTextField.keyboardType=UIKeyboardTypeNumberPad;
 }
 
@@ -37,6 +38,8 @@
 */
 
 #pragma mark - Core Data Methods
+
+// Récupérer le managedObjectContext de AppDelegate
 
 - (NSManagedObjectContext *)managedObjectContext {
     
@@ -59,14 +62,14 @@
     context = [self managedObjectContext];
     
     // Save the object to persistent store
-    NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Etudiant" inManagedObjectContext:context];
+    NSManagedObject *newEtudiant = [NSEntityDescription insertNewObjectForEntityForName:@"Etudiant" inManagedObjectContext:context];
    // NSInteger *ageInteger=[age integerValue];
-    [newDevice setValue:nom forKey:@"nom"];
-    [newDevice setValue:prenom forKey:@"prenom"];
+    [newEtudiant setValue:nom forKey:@"nom"];
+    [newEtudiant setValue:prenom forKey:@"prenom"];
    // [newDevice setValue:ageInteger forKey:@"age"];
     
     NSInteger valueOne = [age integerValue];
-    [newDevice setValue:@(valueOne) forKey:@"age"];
+    [newEtudiant setValue:@(valueOne) forKey:@"age"];
     
     // Afficher erreur en cas de probleme
     NSError *error = nil;
@@ -74,7 +77,9 @@
     if (![context save:&error]) {
         
         NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-        [self alertStatus:@"Erreur!" erreurMsg:@"Impossible de sauvgarder"];
+        
+        // Créer une alerte en cas d'erreur et définir son message 
+        [self alertStatus:@"Erreur!" erreurMsg:@"Impossible d'enregistrer"];
     }
     
     // Dismiss viewController when the action finished

@@ -29,24 +29,33 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+// récupérer les les etudiants à partier du data store et recherger le table view
 - (void)viewDidAppear:(BOOL)animated{
     
+    // Create a new managed object
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    
+    // Créer une nouvelle requête fetch en utilisant l'entité Etudiant
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Etudiant"];
+    
+    // Exécuter la requête fetch et ranger les résultats dans un tableau d'objets  etudiantsArray
     etudiantsArray = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
     
+   // recherger le table view
     [self.studentsTableView reloadData];
-
+    
 }
 
+// Récupérer le  managedObjectContext de AppDelegate
 - (NSManagedObjectContext *)managedObjectContext
 {
     /*NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-    return context;*/
+     id delegate = [[UIApplication sharedApplication] delegate];
+     if ([delegate performSelector:@selector(managedObjectContext)]) {
+     context = [delegate managedObjectContext];
+     }
+     return context;*/
     
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -57,7 +66,7 @@
     }
     
     return context;
-
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -72,16 +81,19 @@
     return self.etudiantsArray.count;
 }
 
+//Récupérer l'information d'etudiant dans la table view
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
     NSManagedObject *etudiant = [self.etudiantsArray objectAtIndex:indexPath.row];
+    
     [cell.textLabel setText:[NSString stringWithFormat:@"%@ %@", [etudiant valueForKey:@"nom"], [etudiant valueForKey:@"prenom"]]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@",[etudiant valueForKey:@"age"]]];
-    //[NSString stringWithFormat:@"%@",[etudiant valueForKey:@"age"]];
+    
     
     return cell;
 }
